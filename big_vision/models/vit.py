@@ -114,6 +114,7 @@ class Encoder(nn.Module):
 
     # Input Encoder
     for lyr in range(self.depth):
+      print("Layer:", lyr)
       block = Encoder1DBlock(
           name=f"encoderblock_{lyr}",
           mlp_dim=self.mlp_dim, num_heads=self.num_heads, dropout=self.dropout)
