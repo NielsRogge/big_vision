@@ -166,6 +166,9 @@ class _Model(nn.Module):
   def __call__(self, image, *, train=False):
     out = {}
 
+    print("Shape of pixel values:", image.shape)
+    print("First values of pixel values:", image[0, :3, :3, 0])
+
     # Patch extraction
     x = out["stem"] = nn.Conv(
         self.width, self.patch_size, strides=self.patch_size,
@@ -173,6 +176,9 @@ class _Model(nn.Module):
 
     n, h, w, c = x.shape
     x = jnp.reshape(x, [n, h * w, c])
+
+    print("Shape of patch embeddings:", x.shape)
+    print("First values of patch embeddings:", x[0, :3, :3])
 
     # Add posemb before adding extra token.
     x = out["with_posemb"] = x + get_posemb(
