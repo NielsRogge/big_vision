@@ -61,11 +61,17 @@ class _Model(nn.Module):
     embedding = nn.Embed(num_embeddings=self.vocab_size, features=self.width)
     x = out["embedded"] = embedding(text)
 
+    print("Shape of embeddings:", x.shape)
+    print("First values of embeddings:", x[0, :3, :3])
+
     # Add posemb
     n, l, d = x.shape  # pylint: disable=unused-variable
     x = x + self.param("pos_embedding",
                        nn.initializers.normal(stddev=1/np.sqrt(d)),
                        (1, l, d), x.dtype)
+    
+    print("Shape of embeddings after position embeddings:", x.shape)
+    print("First values of embeddings after position embeddings:", x[0, :3, :3])
 
     x, encoder_out = vit.Encoder(
         depth=self.depth, mlp_dim=self.mlp_dim, num_heads=self.num_heads,

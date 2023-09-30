@@ -290,6 +290,8 @@ class _Model(nn.Module):
       x_2d = out["logits_2d"] = head(x_2d)
       x = out["logits"] = head(x)
 
+    print("First values of final output:", x[0, :3])
+
     return x, out
 
 
