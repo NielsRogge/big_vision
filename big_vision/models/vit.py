@@ -81,9 +81,13 @@ class Encoder1DBlock(nn.Module):
   dropout: float = 0.0
 
   @nn.compact
-  def __call__(self, x, deterministic=True):
+  def __call__(self, x, deterministic=True, print_values=False):
     out = {}
     y = nn.LayerNorm()(x)
+
+    if print_values:
+      print("Hidden states after LayerNorm:", y[0, :3, :3])
+
     y = out["sa"] = nn.MultiHeadDotProductAttention(
         num_heads=self.num_heads,
         kernel_init=nn.initializers.xavier_uniform(),
@@ -118,7 +122,7 @@ class Encoder(nn.Module):
       block = Encoder1DBlock(
           name=f"encoderblock_{lyr}",
           mlp_dim=self.mlp_dim, num_heads=self.num_heads, dropout=self.dropout)
-      x, out[f"block{lyr:02d}"] = block(x, deterministic)
+      x, out[f"block{lyr:02d}"] = block(x, deterministic, print_values=lyr==0)
     out["pre_ln"] = x  # Alias for last block, but without the number in it.
 
     return nn.LayerNorm(name="encoder_norm")(x), out
