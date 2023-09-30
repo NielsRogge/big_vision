@@ -242,6 +242,11 @@ class _Model(nn.Module):
             x, deterministic=not train)
     encoded = out["encoded"] = x
 
+    print("Shape of encoded sequence:", x.shape)
+    print("First values of encoded sequence:", x[0, :3, :3])
+
+    print("Pool type:", self.pool_type)
+
     if self.pool_type == "map":
       x = out["head_input"] = MAPHead(
           num_heads=self.num_heads, mlp_dim=self.mlp_dim)(x)
