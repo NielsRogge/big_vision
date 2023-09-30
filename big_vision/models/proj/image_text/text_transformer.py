@@ -87,6 +87,7 @@ class _Model(nn.Module):
     print("Final text hidden states:", x[0,:3,:3])
 
     print("Pool type:", self.pool_type)
+    print("Number of classes:", self.num_classes)
 
     if self.pool_type == "last":
       # Assuming "sticky" EOS tokenization, last token is always EOS.
@@ -104,6 +105,9 @@ class _Model(nn.Module):
       raise NotImplementedError(f"Cannot do pooling '{self.pool_type}'")
 
     x = out["logits"] = nn.Dense(self.num_classes, name="head")(x)
+    
+    print("Final text logits:", x[0,:3])
+    
     return x, out
 
 
