@@ -118,11 +118,18 @@ class Encoder(nn.Module):
 
     # Input Encoder
     for lyr in range(self.depth):
-      print(f"First values of hidden states before layer {lyr}:", x[0, :3, :3])
+
+      if lyr == 0:
+        print(f"First values of hidden states before layer {lyr}:", x[0, :3, :3])
+      
       block = Encoder1DBlock(
           name=f"encoderblock_{lyr}",
           mlp_dim=self.mlp_dim, num_heads=self.num_heads, dropout=self.dropout)
       x, out[f"block{lyr:02d}"] = block(x, deterministic, print_values=lyr==0)
+
+      if lyr == 0:
+        print(f"First values of hidden states after layer {lyr}:", x[0, :3, :3])
+
     out["pre_ln"] = x  # Alias for last block, but without the number in it.
 
     return nn.LayerNorm(name="encoder_norm")(x), out
