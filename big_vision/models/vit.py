@@ -94,7 +94,14 @@ class Encoder1DBlock(nn.Module):
         deterministic=deterministic,
     )(y, y)
     y = nn.Dropout(rate=self.dropout)(y, deterministic)
+
+    if print_values:
+      print("Hidden states after self-attention:", y[0, :3, :3])
+
     x = out["+sa"] = x + y
+
+    if print_values:
+      print("Hidden states after first residual:", x[0, :3, :3])
 
     y = nn.LayerNorm()(x)
     y = out["mlp"] = MlpBlock(
