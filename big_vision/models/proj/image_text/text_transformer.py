@@ -84,6 +84,10 @@ class _Model(nn.Module):
     # Share weights between embeddings and logit transformation.
     out["vocab_logits"] = embedding.attend(x)
 
+    print("Final text hidden states:", x[0,:3,:3])
+
+    print("Pool type:", self.pool_type)
+
     if self.pool_type == "last":
       # Assuming "sticky" EOS tokenization, last token is always EOS.
       x = out["pre_logits"] = x[:, -1, :]
