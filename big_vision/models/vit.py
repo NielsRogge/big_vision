@@ -257,6 +257,10 @@ class _Model(nn.Module):
     if self.pool_type == "map":
       x = out["head_input"] = MAPHead(
           num_heads=self.num_heads, mlp_dim=self.mlp_dim)(x)
+      
+      print("Shape of pooled vision output:", x.shape)
+      print("First values of pooled vision output:", x[0, :3])
+
     elif self.pool_type == "gap":
       x = out["head_input"] = jnp.mean(x, axis=1)
     elif self.pool_type == "0":
