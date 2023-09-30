@@ -73,6 +73,8 @@ class _Model(nn.Module):
     print("Shape of embeddings after position embeddings:", x.shape)
     print("First values of embeddings after position embeddings:", x[0, :3, :3])
 
+    print("Number of attention heads:", self.num_heads)
+
     x, encoder_out = vit.Encoder(
         depth=self.depth, mlp_dim=self.mlp_dim, num_heads=self.num_heads,
         dropout=self.dropout)(x, deterministic=not train)
