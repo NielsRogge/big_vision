@@ -179,6 +179,8 @@ class MAPHead(nn.Module):
                        (1, 1, d), x.dtype)
     probe = jnp.tile(probe, [n, 1, 1])
 
+    print("Number of attention heads in MAPHead:", self.num_heads)
+
     print("Shape of probe:", probe.shape)
     print("First values of probe:", probe[0, :3, :3])
     print("Shape of x:", x.shape)
