@@ -179,6 +179,11 @@ class MAPHead(nn.Module):
                        (1, 1, d), x.dtype)
     probe = jnp.tile(probe, [n, 1, 1])
 
+    print("Shape of probe:", probe.shape)
+    print("First values of probe:", probe[0, :3, :3])
+    print("Shape of x:", x.shape)
+    print("First values of x:", x[0, :3, :3])
+
     x = nn.MultiHeadDotProductAttention(
         num_heads=self.num_heads,
         kernel_init=nn.initializers.xavier_uniform())(probe, x)
