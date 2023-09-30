@@ -59,18 +59,34 @@ class MlpBlock(nn.Module):
   dropout: float = 0.0
 
   @nn.compact
-  def __call__(self, x, deterministic=True):
+  def __call__(self, x, deterministic=True, print_values=False):
     """Applies Transformer MlpBlock module."""
     inits = dict(
         kernel_init=nn.initializers.xavier_uniform(),
         bias_init=nn.initializers.normal(stddev=1e-6),
     )
 
+    if print_values:
+      print("Deterministic:", deterministic)
+      print("Dtype of the hidden states:", x.dtype)
+
     n, l, d = x.shape  # pylint: disable=unused-variable
     x = nn.Dense(self.mlp_dim or 4 * d, **inits)(x)
+
+    if print_values:
+      print("Hidden states after first dense:", x[0, :3, :3])
+
     x = nn.gelu(x)
+
+    if print_values:
+      print("Hidden states after gelu:", x[0, :3, :3])
+
     x = nn.Dropout(rate=self.dropout)(x, deterministic)
     x = nn.Dense(d, **inits)(x)
+
+    if print_values:
+      print("Hidden states after second dense:", x[0, :3, :3])
+
     return x
 
 
@@ -110,7 +126,7 @@ class Encoder1DBlock(nn.Module):
 
     y = out["mlp"] = MlpBlock(
         mlp_dim=self.mlp_dim, dropout=self.dropout,
-    )(y, deterministic)
+    )(y, deterministic, print_values=print_values)
 
     if print_values:
       print("Hidden states after MLP:", y[0, :3, :3])
