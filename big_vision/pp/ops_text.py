@@ -60,6 +60,7 @@ def tokenize(input_text, tokenizer, max_len, *, pad_value, force_eos,
   def pad(tokens):
     # Truncate/pad to max_len.
     if force_eos:
+      print("Shape of tokens:", tf.shape(tokens)[0])
       tokens = tf.cond(
           tf.shape(tokens)[0] >= max_len,
           lambda: tf.concat(
@@ -80,6 +81,7 @@ def tokenize(input_text, tokenizer, max_len, *, pad_value, force_eos,
   tokens = tokenizer.tokenize(input_text)
 
   if multi_text:
+    print("we are using multi_text")
     tokens = tokens.to_tensor(pad_value)  # tf.RaggedTensor to tf.Tensor
     tokens = tf.reshape(tokens, [-1, tf.shape(tokens)[-1]])
     tokens = tf.map_fn(pad, tokens)  # `map_fn` only maps on axis 0
@@ -87,6 +89,7 @@ def tokenize(input_text, tokenizer, max_len, *, pad_value, force_eos,
     final_shape = tf.concat([tf.shape(input_text), [max_len]], axis=0)
     return tf.reshape(tokens, final_shape)
   else:
+    print("we are just padding")
     return pad(tokens)
 
 
