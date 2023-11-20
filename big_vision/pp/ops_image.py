@@ -67,7 +67,11 @@ def get_resize(size, method="bilinear", antialias=False):
     # applied after resize.
     dtype = image.dtype
     image = tf.image.resize(image, size, method=method, antialias=antialias)
-    return tf.cast(image, dtype)
+    image = tf.cast(image, dtype)
+
+    print("Mean value of image:", image.mean())
+
+    return image
 
   return _resize
 
