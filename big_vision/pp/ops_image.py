@@ -69,7 +69,7 @@ def get_resize(size, method="bilinear", antialias=False):
     image = tf.image.resize(image, size, method=method, antialias=antialias)
     image = tf.cast(image, dtype)
 
-    print("Mean value of image:", image.mean())
+    print("Mean value of image:", image.numpy().mean())
 
     return image
 
